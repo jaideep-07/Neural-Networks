@@ -1,0 +1,46 @@
+clear;
+clc;
+w=random('Normal',0,1,2,2);
+disp(w)
+alpha=abs(random('Normal',0,1));
+beta=abs(random('Normal',0,1));
+v=random('Normal',0,1,2,2);
+disp(v)
+stalpha=input('Enter stopping learning rate alpha:');
+stbeta=input('Enter stopping learning rate beta:');
+x=[1 0];
+y=[1 0];
+n=2;
+D=zeros(1,2);
+flag=0;
+while(flag==0)
+for j=1:2
+    for i=1:2
+        D(j)=x(i)-v(i,j)+y(i)-w(i,j)+D(j);
+    end
+end
+vold=v;
+wold=w;
+if D(1)>D(2) || D(1)==D(2)
+        for i=1:n
+            v(i,1)=vold(i,1)+alpha*(x(i)-vold(i,1));
+            w(i,1)=wold(i,1)+beta*(y(i)-wold(i,1));
+        end
+else
+        for i=1:n
+            v(i,2)=vold(i,2)+alpha*(x(i)-vold(i,2));
+            w(i,2)=vold(i,2)+beta*(x(i)-wold(i,2));
+        end
+end
+alpha=0.5*alpha;
+beta=0.5*beta;
+if alpha<stalpha && beta<stbeta
+    flag=1;
+else
+    continue;
+end
+disp('Weights are w:');
+disp(w)
+disp('v:')
+disp(v)
+end
